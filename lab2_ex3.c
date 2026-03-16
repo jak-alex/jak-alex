@@ -9,17 +9,11 @@ int main() {
 
     // Введення цілих значень
     printf("Введіть ціле число x: ");
-    if (scanf("%d", &x) != 1) {
-        printf("Помилка: введено не число!\n");
-        return 1;
-    }
-
+    scanf("%d", &x);
+    
     printf("Введіть ціле число y: ");
-    if (scanf("%d", &y) != 1) {
-        printf("Помилка: введено не число!\n");
-        return 1;
-    }
-
+    scanf("%d", &y);
+    
     // Формула: f = (x^2 + xy - y^2) / (1 + x^2 + y^2)
 
     double numerator = pow(x, 2) + (x * y) - pow(y, 2);
