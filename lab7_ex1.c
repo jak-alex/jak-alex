@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h> 
 
-// Прототип функції (оголошення) [cite: 50, 53]
+// Прототип функції
 double Leng(double x1, double y1, double x2, double y2);
 
 int main() {
@@ -20,7 +20,7 @@ int main() {
     printf("Введіть координати точки D (x y): ");
     scanf("%lf %lf", &xD, &yD);
 
-    // Виклик функції для кожного відрізка [cite: 35, 203]
+    // Виклик функції для кожного відрізка
     double lengthAB = Leng(xA, yA, xB, yB);
     double lengthBC = Leng(xB, yB, xC, yC);
     double lengthCD = Leng(xC, yC, xD, yD);
@@ -34,7 +34,7 @@ int main() {
     return 0;
 }
 
-// Визначення (реалізація) функції Leng за формулою з завдання [cite: 34, 202]
+// Визначення (реалізація) функції Leng за формулою з завдання 
 double Leng(double x1, double y1, double x2, double y2) {
     // Формула: sqrt((x1-x2)^2 + (y1-y2)^2)
     return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
