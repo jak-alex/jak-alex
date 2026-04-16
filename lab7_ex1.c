@@ -34,7 +34,6 @@ int main() {
     return 0;
 }
 
-// Визначення (реалізація) функції Leng за формулою з завдання 
 double Leng(double x1, double y1, double x2, double y2) {
     // Формула: sqrt((x1-x2)^2 + (y1-y2)^2)
     return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
