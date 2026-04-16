@@ -1,40 +1,68 @@
-#include <stdio.h>
-#include <math.h> 
+б#include <stdio.h>
+#include <math.h>
+#include <stdlib.h> // Для системи (опціонально)
 
 // Прототип функції
 double Leng(double x1, double y1, double x2, double y2);
 
 int main() {
-    // Змінні для координат точок A, B, C, D
     double xA, yA, xB, yB, xC, yC, xD, yD;
+    int choice;
 
-    printf("Введіть координати точки A (x y): ");
-    scanf("%lf %lf", &xA, &yA);
+    while (1) {
+        // Виведення контекстного меню
+        printf("\n--- МЕНЮ ---\n");
+        printf("1. Ввести координати точок (A, B, C, D)\n");
+        printf("2. Обчислити довжини відрізків (AB, BC, CD)\n");
+        printf("3. Вихід\n");
+        printf("Ваш вибір: ");
 
-    printf("Введіть координати точки B (x y): ");
-    scanf("%lf %lf", &xB, &yB);
+        // Перевірка на правильність вводу цифри меню
+        if (scanf("%d", &choice) != 1) {
+            printf("Помилка! Введіть число.\n");
+            while (getchar() != '\n'); // Очищення буфера від літер
+            continue;
+        }
 
-    printf("Введіть координати точки C (x y): ");
-    scanf("%lf %lf", &xC, &yC);
+        switch (choice) {
+            case 1:
+                printf("Введіть A (x y): ");
+                scanf("%lf %lf", &xA, &yA);
+                printf("Введіть B (x y): ");
+                scanf("%lf %lf", &xB, &yB);
+                printf("Введіть C (x y): ");
+                scanf("%lf %lf", &xC, &yC);
+                printf("Введіть D (x y): ");
+                scanf("%lf %lf", &xD, &yD);
+                printf("Дані збережено.\n");
+                break;
 
-    printf("Введіть координати точки D (x y): ");
-    scanf("%lf %lf", &xD, &yD);
+            case 2: {
+                // Робимо обчислення
+                double lengthAB = Leng(xA, yA, xB, yB);
+                double lengthBC = Leng(xB, yB, xC, yC);
+                double lengthCD = Leng(xC, yC, xD, yD);
 
-    // Виклик функції для кожного відрізка
-    double lengthAB = Leng(xA, yA, xB, yB);
-    double lengthBC = Leng(xB, yB, xC, yC);
-    double lengthCD = Leng(xC, yC, xD, yD);
+                printf("\n--- Результати ---\n");
+                printf("AB = %.2f\n", lengthAB);
+                printf("BC = %.2f\n", lengthBC);
+                printf("CD = %.2f\n", lengthCD);
+                break;
+            }
 
-    // Виведення результатів
-    printf("\nРезультати:\n");
-    printf("Довжина AB: %.2f\n", lengthAB);
-    printf("Довжина BC: %.2f\n", lengthBC);
-    printf("Довжина CD: %.2f\n", lengthCD);
+            case 3:
+                printf("Завершення програми.\n");
+                return 0;
+
+            default:
+                printf("Невірний вибір! Спробуйте ще раз.\n");
+        }
+    }
 
     return 0;
 }
 
+// Реалізація функції
 double Leng(double x1, double y1, double x2, double y2) {
-    // Формула: sqrt((x1-x2)^2 + (y1-y2)^2)
     return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
 }
