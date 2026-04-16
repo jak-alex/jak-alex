@@ -5,7 +5,7 @@
 
 #define SIZE 10
 
-// Прототипи функцій [cite: 50, 65]
+// Прототипи функцій
 void initArray(int arr[], int n);
 void printArray(int arr[], int n);
 int countZeros(int arr[], int n);
@@ -56,14 +56,14 @@ int main() {
     }
 }
 
-// 1. Функція ініціалізації масиву випадковими числами [cite: 251, 252]
+// Функція ініціалізації масиву випадковими числами 
 void initArray(int arr[], int n) {
     for (int i = 0; i < n; i++) {
         arr[i] = rand() % 201 - 100; // Діапазон [-100; 100]
     }
 }
 
-// 2. Функція виведення масиву 
+// Функція виведення масиву 
 void printArray(int arr[], int n) {
     printf("Масив: ");
     for (int i = 0; i < n; i++) {
@@ -72,7 +72,7 @@ void printArray(int arr[], int n) {
     printf("\n");
 }
 
-// 3. Кількість нульових елементів [cite: 265]
+// Кількість нульових елементів 
 int countZeros(int arr[], int n) {
     int count = 0;
     for (int i = 0; i < n; i++) {
@@ -81,7 +81,7 @@ int countZeros(int arr[], int n) {
     return count;
 }
 
-// 4. Добуток елементів після максимального за модулем [cite: 265, 266]
+// Добуток елементів після максимального за модулем 
 long long productAfterMaxAbs(int arr[], int n) {
     int maxAbsIndex = 0;
     int maxAbsValue = abs(arr[0]);
