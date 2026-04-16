@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include <stdlib.h> // Для системи (опціонально)
+#include <stdlib.h> 
 
 // Прототип функції
 double Leng(double x1, double y1, double x2, double y2);
@@ -10,7 +10,6 @@ int main() {
     int choice;
 
     while (1) {
-        // Виведення контекстного меню
         printf("\n--- МЕНЮ ---\n");
         printf("1. Ввести координати точок (A, B, C, D)\n");
         printf("2. Обчислити довжини відрізків (AB, BC, CD)\n");
