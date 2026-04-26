@@ -1,77 +1,100 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h>   
+#include <stdlib.h>  
 
-// Спрощена структура для файлових операцій
+// Визначаємо структуру книги
 typedef struct {
-    char cpu_type[30];
-    float frequency;
-    int ram;
-    int disk;
-} CompData;
+    char author[50];    // Масив для прізвища автора
+    char title[50];     // Масив для назви книги
+    char publisher[50]; // Масив для назви видавництва
+    int year;           // Ціле число для року видання
+} Book;
 
 int main() {
     int choice;
-    char filename[] = "storage.dat"; // Ім'я бінарного файлу
+    char binary_filename[] = "library.dat"; // Назва "сирого" бінарного файлу
 
     while (1) {
-        printf("\n--- Меню ---\n");
-        printf("1. Записати дані у файл\n");
-        printf("2. Прочитати з файлу та знайти результат\n");
+        printf("\n==========================================\n");
+        printf("                   МЕНЮ                    \n");
+        printf("==========================================\n");
+        printf("1. Ввести книги та зберегти у бінарний файл\n");
+        printf("2. Прочитати файл та відфільтрувати книги (>2000)\n");
         printf("0. Вихід\n");
-        printf("Вибір: ");
+        printf("Ваш вибір: ");
 
-        if (scanf("%d", &choice) != 1) { while(getchar()!='\n'); continue; }
-        if (choice == 0) break;
+        // Захист від введення літер замість цифр
+        if (scanf("%d", &choice) != 1) {
+            while (getchar() != '\n'); // Очищуємо буфер від "сміття"
+            continue;
+        }
+
+        if (choice == 0) break; // Вихід з нескінченного циклу
 
         if (choice == 1) {
-            // "wb" - write binary (запис у бінарному вигляді)
-            FILE *f = fopen(filename, "wb"); 
-            if (!f) { printf("Помилка файлу!\n"); continue; }
+            // "wb" - write binary. Створюємо новий файл або перезаписуємо старий
+            FILE *f = fopen(binary_filename, "wb"); 
+            if (!f) {
+                printf("Помилка: не вдалося створити файл!\n");
+                continue;
+            }
 
             int n;
-            printf("Кількість ПК для запису: ");
+            printf("Скільки книг ви хочете внести в базу? ");
             scanf("%d", &n);
+
             for (int i = 0; i < n; i++) {
-                CompData temp;
-                printf("Введіть (CPU Freq RAM Disk): ");
-                scanf("%s %f %d %d", temp.cpu_type, &temp.frequency, &temp.ram, &temp.disk);
-                // Записуємо весь блок даних (структуру) одним махом
-                fwrite(&temp, sizeof(CompData), 1, f);
+                Book temp;
+                printf("\n--- Книга #%d ---\n", i + 1);
+                printf("Автор (без пробілів): "); scanf("%s", temp.author);
+                printf("Назва (без пробілів): "); scanf("%s", temp.title);
+                printf("Видавництво: ");          scanf("%s", temp.publisher);
+                printf("Рік видання: ");         scanf("%d", &temp.year);
+
+                // fwrite записує блок пам'яті прямо у файл.
+                // sizeof(Book) каже комп'ютеру, скільки байтів займає одна структура.
+                fwrite(&temp, sizeof(Book), 1, f);
             }
-            fclose(f); // Закриваємо файл
-            printf("Дані збережені у %s\n", filename);
+
+            fclose(f); // ЗАКРИВАЄМО файл, щоб дані реально збереглися на диску
+            printf("\nДані успішно збережені у файлі %s\n", binary_filename);
 
         } else if (choice == 2) {
-            // "rb" - read binary (читання бінарного файлу)
-            FILE *f = fopen(filename, "rb"); 
-            if (!f) { printf("Файл не знайдено!\n"); continue; }
+            // "rb" - read binary. Відкриваємо файл тільки для читання
+            FILE *bin_file = fopen(binary_filename, "rb");
+            if (!bin_file) {
+                printf("Помилка: файл %s не знайдено! Спочатку оберіть пункт 1.\n", binary_filename);
+                continue;
+            }
 
-            CompData temp, best;
+            // "w" - звичайний текстовий запис. Створюємо звіт для людини
+            FILE *txt_report = fopen("modern_books.txt", "w");
+            
+            Book b;
             int found = 0;
-            printf("\n--- Вміст файлу ---\n");
-            // fread повертає кількість успішно зчитаних об'єктів (1 або 0 в кінці файлу)
-            while (fread(&temp, sizeof(CompData), 1, f)) {
-                printf("CPU: %s | RAM: %d GB\n", temp.cpu_type, temp.ram);
-                // Логіка пошуку: наприклад, найбільший обсяг RAM
-                if (!found || temp.ram > best.ram) {
-                    best = temp;
+            printf("\n--- КНИГИ, ВИДАНІ ПІСЛЯ 2000 РОКУ ---\n");
+            fprintf(txt_report, "ЗВІТ: Книги після 2000 року\n\n");
+
+            // fread повертає 1, поки успішно зчитує по одному блоку розміром sizeof(Book)
+            while (fread(&b, sizeof(Book), 1, bin_file)) {
+                // ПЕРЕВІРКА УМОВИ ВАРІАНТА 11
+                if (b.year > 2000) {
+                    // Виводимо в консоль
+                    printf("Автор: %-15s | Назва: %-20s | Рік: %d\n", b.author, b.title, b.year);
+                    
+                    // Записуємо у текстовий файл через fprintf (як printf, але у файл)
+                    fprintf(txt_report, "Автор: %s, Назва: \"%s\", Рік: %d\n", b.author, b.title, b.year);
                     found = 1;
                 }
             }
-            fclose(f);
-            
-            if (found) {
-                printf("\nЗнайдено ПК з найбільшою RAM: %s (%d GB)\n", best.cpu_type, best.ram);
-                
-                // Додатковий пункт завдання: запис результату в текстовий файл
-                FILE *res_file = fopen("result.txt", "w");
-                if (res_file) {
-                    fprintf(res_file, "Найкращий результат: %s, RAM: %d GB", best.cpu_type, best.ram);
-                    fclose(res_file);
-                    printf("Результат розрахунку збережено у result.txt\n");
-                }
-            }
+
+            if (!found) printf("Таких книг у базі немає.\n");
+
+            fclose(bin_file);  // Закриваємо бінарний файл
+            fclose(txt_report); // Закриваємо текстовий звіт
+            printf("\nРезультати фільтрації збережені у 'modern_books.txt'\n");
         }
     }
+
+    printf("Програму завершено. Успіхів!\n");
     return 0;
 }
